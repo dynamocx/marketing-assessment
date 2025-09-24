@@ -977,39 +977,30 @@
 
         // GoHighLevel API Configuration
         const GHL_CONFIG = {
-            // Replace with your actual GoHighLevel API token (account-level)
-            apiToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6IkVuaE9obThPOHdIakxGRXlWdVZlIiwidmVyc2lvbiI6MSwiaWF0IjoxNzU4NzIyMzA4MDM3LCJzdWIiOiI4T24wWlU1ckx4Z3ZKbkJLSnZTUSJ9.adC2psWsnJUy91k-QvnX8M8MBI0UbcH_TSn_d1lf-9A',
-            // Replace with your GoHighLevel location ID (associated with the account-level token)
+            // You need an ACCOUNT-LEVEL API token, not location-level
+            // Get this from: GoHighLevel Dashboard > Settings > API Keys > Account Level
+            apiToken: 'YOUR_ACCOUNT_LEVEL_API_TOKEN_HERE',
+            // Your GoHighLevel location ID
             locationId: 'EnhOhm8O8wHjLFEyVuVe',
-            // Replace with your GoHighLevel pipeline ID for leads (optional - leave as is if you don't have one)
-            pipelineId: 'YOUR_PIPELINE_ID_HERE'
+            // GoHighLevel pipeline ID for leads (optional)
+            pipelineId: null
         };
 
         async function submitLeadToGoHighLevel(leadData) {
-            // Try different API endpoints for GoHighLevel
-            const urls = [
-                'https://services.leadconnectorhq.com/contacts/',
-                `https://services.leadconnectorhq.com/contacts/?locationId=${GHL_CONFIG.locationId}`,
-                `https://services.leadconnectorhq.com/contacts/?access_token=${GHL_CONFIG.apiToken}`
-            ];
-            
-            console.log('Submitting to GoHighLevel');
-            console.log('API Token (first 50 chars):', GHL_CONFIG.apiToken.substring(0, 50) + '...');
-            console.log('Location ID:', GHL_CONFIG.locationId);
-            
-            // Try to decode the JWT to check if it's valid
-            try {
-                const tokenParts = GHL_CONFIG.apiToken.split('.');
-                if (tokenParts.length === 3) {
-                    const payload = JSON.parse(atob(tokenParts[1]));
-                    console.log('JWT Payload:', payload);
-                    console.log('JWT Expiry:', new Date(payload.exp * 1000));
-                    console.log('JWT Issued At:', new Date(payload.iat * 1000));
-                }
-            } catch (e) {
-                console.error('Error decoding JWT:', e);
+            // Check if API token is configured
+            if (!GHL_CONFIG.apiToken || GHL_CONFIG.apiToken === 'YOUR_ACCOUNT_LEVEL_API_TOKEN_HERE') {
+                throw new Error('GoHighLevel API token not configured. Please add your account-level API token to GHL_CONFIG.apiToken');
             }
             
+            // Use the correct GoHighLevel API endpoint
+            const apiUrl = `https://services.leadconnectorhq.com/contacts/`;
+            
+            console.log('Submitting to GoHighLevel');
+            console.log('API Token (first 10 chars):', GHL_CONFIG.apiToken.substring(0, 10) + '...');
+            console.log('Location ID:', GHL_CONFIG.locationId);
+            console.log('API URL:', apiUrl);
+            
+            // Prepare contact data according to GoHighLevel API specification
             const contactData = {
                 firstName: leadData.name.split(' ')[0] || leadData.name,
                 lastName: leadData.name.split(' ').slice(1).join(' ') || '',
@@ -1018,6 +1009,7 @@
                 companyName: leadData.company,
                 source: 'Growth Readiness Assessment',
                 tags: ['Marketing Assessment', 'Lead Generated'],
+                locationId: GHL_CONFIG.locationId,
                 customFields: [
                     {
                         key: 'assessment_completed_date',
@@ -1056,25 +1048,10 @@
                 ]
             };
 
-            // Only add pipeline ID if it's provided and not the placeholder
-            if (GHL_CONFIG.pipelineId && GHL_CONFIG.pipelineId !== 'YOUR_PIPELINE_ID_HERE') {
-                contactData.pipelineId = GHL_CONFIG.pipelineId;
-            }
-
-            // Only add location ID if it's provided and not the placeholder
-            if (GHL_CONFIG.locationId && GHL_CONFIG.locationId !== 'YOUR_LOCATION_ID_HERE') {
-                contactData.locationId = GHL_CONFIG.locationId;
-            }
-
             console.log('Contact data being sent:', contactData);
 
-            // Try multiple authentication approaches
-            let response;
-            let attempt = 0;
-            
-            // Try standard Bearer token approach
-            console.log(`Attempt ${++attempt}: Standard Bearer token`);
-            response = await fetch(urls[0], {
+            // Make API call with proper authentication
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${GHL_CONFIG.apiToken}`,
@@ -1083,33 +1060,6 @@
                 },
                 body: JSON.stringify(contactData)
             });
-
-            // If first attempt fails with 401, try with locationId in URL
-            if (!response.ok && response.status === 401) {
-                console.log(`Attempt ${++attempt}: Bearer token with locationId in URL`);
-                response = await fetch(urls[1], {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${GHL_CONFIG.apiToken}`,
-                        'Content-Type': 'application/json',
-                        'Version': '2021-07-28'
-                    },
-                    body: JSON.stringify(contactData)
-                });
-            }
-
-            // If still failing, try access_token as query parameter
-            if (!response.ok && response.status === 401) {
-                console.log(`Attempt ${++attempt}: Access token as query parameter`);
-                response = await fetch(urls[2], {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Version': '2021-07-28'
-                    },
-                    body: JSON.stringify(contactData)
-                });
-            }
 
             console.log('Response status:', response.status);
             console.log('Response headers:', response.headers);
@@ -1151,13 +1101,20 @@
             submitBtn.disabled = true;
             
             try {
-                // Test if we're on localhost
+                // Test if we're on localhost or if API token is not configured
                 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const isTokenConfigured = GHL_CONFIG.apiToken && GHL_CONFIG.apiToken !== 'YOUR_ACCOUNT_LEVEL_API_TOKEN_HERE';
+                
                 console.log('Testing from localhost:', isLocalhost);
+                console.log('API token configured:', isTokenConfigured);
                 console.log('Current URL:', window.location.href);
                 
-                if (isLocalhost) {
-                    console.log('LOCALHOST DETECTED: GoHighLevel API calls may be blocked by CORS');
+                if (isLocalhost || !isTokenConfigured) {
+                    if (isLocalhost) {
+                        console.log('LOCALHOST DETECTED: GoHighLevel API calls may be blocked by CORS');
+                    } else {
+                        console.log('API TOKEN NOT CONFIGURED: Skipping GoHighLevel submission');
+                    }
                     console.log('Data that would be sent to GoHighLevel:', leadData);
                     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
                 } else {
