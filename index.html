@@ -942,6 +942,80 @@
             return recommendations;
         }
 
+        function generateGrowthReadinessSnapshot(leadData) {
+            const responses = leadData.assessmentData;
+            const timestamp = new Date(leadData.timestamp).toLocaleDateString();
+            const readinessScore = calculateReadinessScoreData(responses);
+            const recommendations = generateRecommendations(responses);
+            
+            const snapshot = {
+                timestamp: timestamp,
+                leadInfo: {
+                    name: leadData.name,
+                    company: leadData.company,
+                    email: leadData.email,
+                    phone: leadData.phone
+                },
+                assessmentResults: {
+                    businessGoal: responses['Business Goals'],
+                    budget: responses['Budget'],
+                    currentChannels: Array.isArray(responses['Current Channels']) ? responses['Current Channels'] : [responses['Current Channels']],
+                    challenges: Array.isArray(responses['Challenges']) ? responses['Challenges'] : [responses['Challenges']],
+                    metrics: Array.isArray(responses['Metrics']) ? responses['Metrics'] : [responses['Metrics']],
+                    cacTarget: responses['CAC Goals']
+                },
+                readinessScore: readinessScore,
+                recommendations: recommendations,
+                nextSteps: [
+                    `Focus on primary goal: ${responses['Business Goals']}`,
+                    `Optimize channels: ${Array.isArray(responses['Current Channels']) ? responses['Current Channels'].join(', ') : responses['Current Channels']}`,
+                    `Implement tracking for: ${Array.isArray(responses['Metrics']) ? responses['Metrics'].join(', ') : responses['Metrics']}`,
+                    `Address challenges: ${Array.isArray(responses['Challenges']) ? responses['Challenges'].join(', ') : responses['Challenges']}`,
+                    `Budget allocation based on ${responses['Budget']} range`
+                ]
+            };
+            
+            return snapshot;
+        }
+
+        function calculateReadinessScoreData(responses) {
+            let score = 0;
+            const budget = responses['Budget'];
+            const metrics = Array.isArray(responses['Metrics']) ? responses['Metrics'] : [responses['Metrics']];
+            const cac = responses['CAC Goals'];
+            const channels = Array.isArray(responses['Current Channels']) ? responses['Current Channels'] : [responses['Current Channels']];
+            
+            // Budget scoring
+            if (budget === 'Over $50K') score += 30;
+            else if (budget === '$15K-$50K') score += 25;
+            else if (budget === '$5K-$15K') score += 20;
+            else score += 10;
+            
+            // Metrics scoring
+            if (metrics.includes('Not Sure')) {
+                score += 5;
+            } else {
+                score += Math.min(25, 15 + (metrics.length * 2));
+            }
+            
+            // CAC awareness scoring
+            if (cac !== 'Don\'t Know') score += 25;
+            else score += 5;
+            
+            // Channel usage bonus
+            if (channels.length > 0) {
+                score += Math.min(20, 10 + (channels.length * 2));
+            }
+            
+            const level = score >= 70 ? 'High' : score >= 50 ? 'Medium' : 'Growing';
+            
+            return {
+                score: score,
+                level: level,
+                maxScore: 100
+            };
+        }
+
         function setupExportFunctionality() {
             document.getElementById('export-json').addEventListener('click', exportJSON);
             document.getElementById('copy-summary').addEventListener('click', copySummary);
@@ -1051,6 +1125,34 @@
                 ]
             };
 
+            // Generate Growth Readiness Snapshot data
+            const growthSnapshot = generateGrowthReadinessSnapshot(leadData);
+            console.log('Growth Readiness Snapshot generated:', growthSnapshot);
+
+            // Add snapshot data to contact custom fields
+            contactData.customFields.push(
+                {
+                    key: 'readiness_score',
+                    value: `${growthSnapshot.readinessScore.score}/100 (${growthSnapshot.readinessScore.level})`
+                },
+                {
+                    key: 'readiness_level',
+                    value: growthSnapshot.readinessScore.level
+                },
+                {
+                    key: 'recommendations',
+                    value: growthSnapshot.recommendations.join('; ')
+                },
+                {
+                    key: 'next_steps',
+                    value: growthSnapshot.nextSteps.join('; ')
+                },
+                {
+                    key: 'growth_snapshot_summary',
+                    value: `Business Goal: ${growthSnapshot.assessmentResults.businessGoal} | Budget: ${growthSnapshot.assessmentResults.budget} | Score: ${growthSnapshot.readinessScore.score}/100 (${growthSnapshot.readinessScore.level})`
+                }
+            );
+
             console.log('Contact data being sent:', contactData);
 
             // Try multiple endpoints and authentication methods
@@ -1137,13 +1239,16 @@
                 console.log('Testing from localhost:', isLocalhost);
                 console.log('Current URL:', window.location.href);
                 
+                let contactId = null;
                 if (isLocalhost) {
                     console.log('LOCALHOST DETECTED: GoHighLevel API calls may be blocked by CORS');
                     console.log('Data that would be sent to GoHighLevel:', leadData);
                     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
                 } else {
                     // Store lead data in GoHighLevel CRM
-                    await submitLeadToGoHighLevel(leadData);
+                    const result = await submitLeadToGoHighLevel(leadData);
+                    contactId = result?.contact?.id || result?.id;
+                    console.log('Contact created with ID:', contactId);
                 }
                 
                 // Show success message and generate snapshot
@@ -1153,6 +1258,19 @@
                 
                 // Add lead data to the snapshot
                 addLeadDataToSnapshot(leadData);
+                
+                // Post-submission: Update contact with detailed snapshot (if we have contact ID)
+                if (contactId && !isLocalhost) {
+                    console.log('Post-submission: Updating contact with detailed snapshot...');
+                    setTimeout(async () => {
+                        try {
+                            await updateContactWithSnapshot(contactId, leadData);
+                            console.log('✅ Contact updated with detailed snapshot');
+                        } catch (error) {
+                            console.log('⚠️ Failed to update contact with snapshot (non-critical):', error.message);
+                        }
+                    }, 2000); // Wait 2 seconds before updating
+                }
                 
             } catch (error) {
                 console.error('Error submitting lead:', error);
@@ -1188,6 +1306,73 @@
             `;
             
             snapshotContent.insertBefore(leadInfo, snapshotContent.firstChild);
+        }
+
+        async function updateContactWithSnapshot(contactId, leadData) {
+            const growthSnapshot = generateGrowthReadinessSnapshot(leadData);
+            
+            // Create detailed snapshot notes
+            const snapshotNotes = `
+GROWTH READINESS SNAPSHOT - ${growthSnapshot.timestamp}
+
+ASSESSMENT RESULTS:
+• Business Goal: ${growthSnapshot.assessmentResults.businessGoal}
+• Budget Range: ${growthSnapshot.assessmentResults.budget}
+• Current Channels: ${growthSnapshot.assessmentResults.currentChannels.join(', ')}
+• Main Challenges: ${growthSnapshot.assessmentResults.challenges.join(', ')}
+• Success Metrics: ${growthSnapshot.assessmentResults.metrics.join(', ')}
+• CAC Target: ${growthSnapshot.assessmentResults.cacTarget}
+
+READINESS SCORE: ${growthSnapshot.readinessScore.score}/100 (${growthSnapshot.readinessScore.level} Level)
+
+RECOMMENDATIONS:
+${growthSnapshot.recommendations.map(rec => `• ${rec}`).join('\n')}
+
+NEXT STEPS:
+${growthSnapshot.nextSteps.map(step => `• ${step}`).join('\n')}
+
+Generated by Marketing Growth Readiness Assessment
+            `.trim();
+
+            // Update contact with detailed notes
+            const updateData = {
+                notes: snapshotNotes,
+                tags: ['Marketing Assessment', 'Lead Generated', `Readiness: ${growthSnapshot.readinessScore.level}`]
+            };
+
+            // Try to update the contact
+            const apiUrls = [
+                `https://services.leadconnectorhq.com/contacts/${contactId}`,
+                `https://services.leadconnectorhq.com/contacts/${contactId}/?locationId=${GHL_CONFIG.locationId}`
+            ];
+
+            for (const apiUrl of apiUrls) {
+                try {
+                    console.log(`Updating contact via: ${apiUrl}`);
+                    const response = await fetch(apiUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${GHL_CONFIG.apiToken}`,
+                            'Content-Type': 'application/json',
+                            'Version': '2021-07-28'
+                        },
+                        body: JSON.stringify(updateData)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('✅ Contact updated successfully:', result);
+                        return result;
+                    } else {
+                        const errorText = await response.text();
+                        console.log(`❌ Update failed with status ${response.status}:`, errorText);
+                    }
+                } catch (error) {
+                    console.log(`❌ Update request failed:`, error.message);
+                }
+            }
+            
+            throw new Error('All update attempts failed');
         }
 
         function restartAssessment() {
