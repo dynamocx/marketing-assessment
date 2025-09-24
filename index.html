@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-Minute Marketing Growth Readiness Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .logo i {
+            font-size: 24px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .progress-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 16.66%;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .bot-message .message-content {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .user-message .message-content {
+            background: #667eea;
+            color: white;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            width: 45px;
+            height: 45px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .quick-responses {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quick-response {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .quick-response:hover {
+            background: #e0e0e0;
+        }
+
+        .quick-response.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .continue-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .continue-btn:hover {
+            background: #45a049;
+        }
+
+        .start-section {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results-container {
+            padding: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .results-header h2 {
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .restart-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .snapshot-content {
+            margin-bottom: 30px;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #e9ecef;
+        }
+
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+            margin: 25px 0;
+        }
+
+        .snapshot-section {
+            margin-bottom: 10px;
+        }
+
+        .snapshot-section h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .snapshot-section p {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .snapshot-section ul, .snapshot-section ol {
+            margin-left: 20px;
+        }
+
+        .snapshot-section li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .lead-capture-container {
+            padding: 30px;
+        }
+
+        .lead-capture-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .lead-capture-header h2 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .lead-capture-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .lead-capture-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group input:required:invalid {
+            border-color: #ff6b6b;
+        }
+
+        .submit-lead-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .submit-lead-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .privacy-notice {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .chat-messages {
+                height: 300px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .export-options {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="logo">
+                    <i class="fas fa-rocket"></i>
+                    <h1>Growth Readiness Assessment</h1>
+                </div>
+                <div class="progress-indicator">
+                    <span id="question-counter">Ready to Start</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p>Hi! I'm your 2-Minute Marketing Growth Assistant. Let's quickly assess your current marketing situation to create your Growth Readiness Snapshot.</p>
+                        <p>This will take just 2 minutes with 6 quick questions. Ready to get started?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container" id="chat-input-container" style="display: none;">
+                <div class="input-wrapper">
+                    <input type="text" id="chat-input" placeholder="Type your answer here..." autocomplete="off">
+                    <button id="send-button" class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="quick-responses" id="quick-responses"></div>
+            </div>
+
+            <div class="start-section" id="start-section">
+                <button class="start-btn" id="start-assessment">
+                    <i class="fas fa-play"></i>
+                    Start Assessment
+                </button>
+            </div>
+        </div>
+
+        <div class="lead-capture-container" id="lead-capture-container" style="display: none;">
+            <div class="lead-capture-header">
+                <h2><i class="fas fa-user-plus"></i> Get Your Growth Readiness Snapshot</h2>
+                <p>Enter your details below to receive your personalized assessment report</p>
+            </div>
+            
+            <form class="lead-capture-form" id="lead-capture-form">
+                <div class="form-group">
+                    <label for="lead-name">Full Name *</label>
+                    <input type="text" id="lead-name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lead-email">Email Address *</label>
+                    <input type="email" id="lead-email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lead-phone">Phone Number</label>
+                    <input type="tel" id="lead-phone" name="phone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lead-company">Company Name *</label>
+                    <input type="text" id="lead-company" name="company" required>
+                </div>
+                
+                <button type="submit" class="submit-lead-btn">
+                    <i class="fas fa-download"></i>
+                    Get My Growth Readiness Snapshot
+                </button>
+                
+                <p class="privacy-notice">
+                    <i class="fas fa-shield-alt"></i>
+                    Your information is secure and will never be shared with third parties.
+                </p>
+            </form>
+        </div>
+
+        <div class="results-container" id="results-container" style="display: none;">
+            <div class="results-header">
+                <h2><i class="fas fa-chart-line"></i> Your Growth Readiness Snapshot</h2>
+                <button class="restart-btn" id="restart-assessment">
+                    <i class="fas fa-redo"></i>
+                    Take Assessment Again
+                </button>
+            </div>
+            
+            <div class="snapshot-content" id="snapshot-content">
+                <!-- Results will be populated here -->
+            </div>
+
+            <div class="export-options">
+                <button class="export-btn" id="export-pdf">
+                    <i class="fas fa-file-pdf"></i>
+                    Download PDF
+                </button>
+                <button class="export-btn" id="export-json">
+                    <i class="fas fa-code"></i>
+                    Download JSON
+                </button>
+                <button class="export-btn" id="copy-summary">
+                    <i class="fas fa-copy"></i>
+                    Copy Summary
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Assessment Questions
+        const questions = [
+            {
+                id: 1,
+                question: "What's your primary business goal for the next 6 months?",
+                quickResponses: ["Increase Sales", "Build Brand Awareness", "Generate Leads", "Expand Market Share"],
+                category: "Business Goals",
+                multiple: false
+            },
+            {
+                id: 2,
+                question: "What's your current monthly marketing budget range?",
+                quickResponses: ["Under $5K", "$5K-$15K", "$15K-$50K", "Over $50K"],
+                category: "Budget",
+                multiple: false
+            },
+            {
+                id: 3,
+                question: "Which marketing channels are you currently using? (Select all that apply)",
+                quickResponses: ["Social Media", "Email Marketing", "Paid Ads", "Content Marketing", "SEO", "Influencer Marketing", "PR/Media", "Direct Mail"],
+                category: "Current Channels",
+                multiple: true
+            },
+            {
+                id: 4,
+                question: "What are your biggest marketing challenges right now? (Select all that apply)",
+                quickResponses: ["Lead Generation", "Brand Awareness", "Conversion Rate", "ROI Measurement", "Team Resources", "Content Creation", "Budget Allocation", "Competition"],
+                category: "Challenges",
+                multiple: true
+            },
+            {
+                id: 5,
+                question: "How do you currently measure marketing success? (Select all that apply)",
+                quickResponses: ["Sales Revenue", "Website Traffic", "Lead Quality", "Brand Mentions", "Social Engagement", "Email Open Rates", "Cost Per Lead", "Customer Lifetime Value", "Not Sure"],
+                category: "Metrics",
+                multiple: true
+            },
+            {
+                id: 6,
+                question: "What's your target customer acquisition cost (CAC) range?",
+                quickResponses: ["Under $50", "$50-$200", "$200-$500", "Over $500", "Don't Know"],
+                category: "CAC Goals",
+                multiple: false
+            }
+        ];
+
+        let currentQuestion = 0;
+        let responses = {};
+        let isAssessmentComplete = false;
+        let currentSelections = [];
+
+        // DOM Elements
+        const startSection = document.getElementById('start-section');
+        const chatContainer = document.querySelector('.chat-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInputContainer = document.getElementById('chat-input-container');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        const quickResponses = document.getElementById('quick-responses');
+        const questionCounter = document.getElementById('question-counter');
+        const progressFill = document.getElementById('progress-fill');
+        const leadCaptureContainer = document.getElementById('lead-capture-container');
+        const leadCaptureForm = document.getElementById('lead-capture-form');
+        const resultsContainer = document.getElementById('results-container');
+        const snapshotContent = document.getElementById('snapshot-content');
+        const startBtn = document.getElementById('start-assessment');
+        const restartBtn = document.getElementById('restart-assessment');
+
+        // Event Listeners
+        startBtn.addEventListener('click', startAssessment);
+        restartBtn.addEventListener('click', restartAssessment);
+        sendButton.addEventListener('click', handleSendMessage);
+        leadCaptureForm.addEventListener('submit', handleLeadCapture);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+
+        // Functions
+        function startAssessment() {
+            startSection.style.display = 'none';
+            chatInputContainer.style.display = 'block';
+            currentQuestion = 0;
+            responses = {};
+            askQuestion();
+        }
+
+        function askQuestion() {
+            if (currentQuestion >= questions.length) {
+                completeAssessment();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            questionCounter.textContent = `Question ${currentQuestion + 1} of 6`;
+            progressFill.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Add bot message
+            addBotMessage(question.question);
+            
+            // Add quick response buttons
+            displayQuickResponses(question.quickResponses);
+            
+            chatInput.focus();
+        }
+
+        function displayQuickResponses(responses) {
+            quickResponses.innerHTML = '';
+            const question = questions[currentQuestion];
+            
+            if (question.multiple) {
+                // For multiple selection questions
+                currentSelections = [];
+                responses.forEach(response => {
+                    const button = document.createElement('button');
+                    button.className = 'quick-response multiple-option';
+                    button.textContent = response;
+                    button.addEventListener('click', () => {
+                        toggleSelection(button, response);
+                    });
+                    quickResponses.appendChild(button);
+                });
+                
+                // Add continue button
+                const continueBtn = document.createElement('button');
+                continueBtn.className = 'continue-btn';
+                continueBtn.textContent = 'Continue';
+                continueBtn.style.display = 'none';
+                continueBtn.addEventListener('click', () => {
+                    if (currentSelections.length > 0) {
+                        handleMultipleResponse(currentSelections);
+                    }
+                });
+                quickResponses.appendChild(continueBtn);
+            } else {
+                // For single selection questions
+                responses.forEach(response => {
+                    const button = document.createElement('button');
+                    button.className = 'quick-response';
+                    button.textContent = response;
+                    button.addEventListener('click', () => {
+                        handleResponse(response);
+                    });
+                    quickResponses.appendChild(button);
+                });
+            }
+        }
+
+        function toggleSelection(button, response) {
+            const index = currentSelections.indexOf(response);
+            
+            if (index > -1) {
+                // Remove selection
+                currentSelections.splice(index, 1);
+                button.classList.remove('selected');
+            } else {
+                // Add selection
+                currentSelections.push(response);
+                button.classList.add('selected');
+            }
+            
+            // Show/hide continue button
+            const continueBtn = document.querySelector('.continue-btn');
+            if (continueBtn) {
+                continueBtn.style.display = currentSelections.length > 0 ? 'block' : 'none';
+            }
+        }
+
+        function handleMultipleResponse(selections) {
+            if (isAssessmentComplete) return;
+            
+            const selectionsText = selections.join(', ');
+            addUserMessage(selectionsText);
+            responses[questions[currentQuestion].category] = selections;
+            currentQuestion++;
+            
+            // Clear quick responses
+            quickResponses.innerHTML = '';
+            
+            // Small delay before next question
+            setTimeout(() => {
+                askQuestion();
+            }, 1000);
+        }
+
+        function handleResponse(response) {
+            if (isAssessmentComplete) return;
+            
+            addUserMessage(response);
+            responses[questions[currentQuestion].category] = response;
+            currentQuestion++;
+            
+            // Clear quick responses
+            quickResponses.innerHTML = '';
+            
+            // Small delay before next question
+            setTimeout(() => {
+                askQuestion();
+            }, 1000);
+        }
+
+        function handleSendMessage() {
+            const message = chatInput.value.trim();
+            if (!message || isAssessmentComplete) return;
+            
+            handleResponse(message);
+            chatInput.value = '';
+        }
+
+        function addBotMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <p>${message}</p>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <p>${message}</p>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function completeAssessment() {
+            isAssessmentComplete = true;
+            chatInputContainer.style.display = 'none';
+            
+            addBotMessage("Perfect! I'm analyzing your responses to create your Growth Readiness Snapshot...");
+            
+            setTimeout(() => {
+                chatContainer.style.display = 'none';
+                leadCaptureContainer.style.display = 'block';
+            }, 2000);
+        }
+
+        function generateSnapshot() {
+            const snapshot = createGrowthReadinessSnapshot(responses);
+            snapshotContent.innerHTML = snapshot;
+            
+            // Set up export functionality
+            setupExportFunctionality();
+        }
+
+        function createGrowthReadinessSnapshot(responses) {
+            const timestamp = new Date().toLocaleDateString();
+            
+            return `
+                <div class="snapshot-header">
+                    <h3>Growth Readiness Snapshot</h3>
+                    <p class="timestamp">Generated: ${timestamp}</p>
+                </div>
+                
+                <hr class="section-divider">
+                
+                <div class="snapshot-section">
+                    <h4><i class="fas fa-bullseye"></i> Primary Focus</h4>
+                    <p><strong>Business Goal:</strong> ${responses['Business Goals']}</p>
+                    <p><strong>Main Challenges:</strong> ${Array.isArray(responses['Challenges']) ? responses['Challenges'].join(', ') : responses['Challenges']}</p>
+                </div>
+                
+                <hr class="section-divider">
+                
+                <div class="snapshot-section">
+                    <h4><i class="fas fa-dollar-sign"></i> Investment Readiness</h4>
+                    <p><strong>Budget Range:</strong> ${responses['Budget']}</p>
+                    <p><strong>CAC Target:</strong> ${responses['CAC Goals']}</p>
+                    <div class="readiness-score">
+                        ${calculateReadinessScore(responses)}
+                    </div>
+                </div>
+                
+                <hr class="section-divider">
+                
+                <div class="snapshot-section">
+                    <h4><i class="fas fa-chart-bar"></i> Current Foundation</h4>
+                    <p><strong>Active Channels:</strong> ${Array.isArray(responses['Current Channels']) ? responses['Current Channels'].join(', ') : responses['Current Channels']}</p>
+                    <p><strong>Success Metrics:</strong> ${Array.isArray(responses['Metrics']) ? responses['Metrics'].join(', ') : responses['Metrics']}</p>
+                </div>
+                
+                <hr class="section-divider">
+                
+                <div class="snapshot-section recommendations">
+                    <h4><i class="fas fa-lightbulb"></i> Quick Recommendations</h4>
+                    <ul>
+                        ${generateRecommendations(responses).map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <hr class="section-divider">
+                
+                <div class="snapshot-section">
+                    <h4><i class="fas fa-rocket"></i> Next Steps</h4>
+                    <ol>
+                        <li>Focus on your primary goal: <strong>${responses['Business Goals']}</strong></li>
+                        <li>Optimize your current channels for better ROI: <strong>${Array.isArray(responses['Current Channels']) ? responses['Current Channels'].join(', ') : responses['Current Channels']}</strong></li>
+                        <li>Implement proper tracking for: <strong>${Array.isArray(responses['Metrics']) ? responses['Metrics'].join(', ') : responses['Metrics']}</strong></li>
+                        <li>Address key challenges: <strong>${Array.isArray(responses['Challenges']) ? responses['Challenges'].join(', ') : responses['Challenges']}</strong></li>
+                        <li>Consider budget allocation based on your ${responses['Budget']} range</li>
+                    </ol>
+                </div>
+            `;
+        }
+
+        function calculateReadinessScore(responses) {
+            let score = 0;
+            const budget = responses['Budget'];
+            const metrics = Array.isArray(responses['Metrics']) ? responses['Metrics'] : [responses['Metrics']];
+            const cac = responses['CAC Goals'];
+            const channels = Array.isArray(responses['Current Channels']) ? responses['Current Channels'] : [responses['Current Channels']];
+            
+            // Budget scoring
+            if (budget === 'Over $50K') score += 30;
+            else if (budget === '$15K-$50K') score += 25;
+            else if (budget === '$5K-$15K') score += 20;
+            else score += 10;
+            
+            // Metrics scoring (bonus for multiple metrics)
+            if (metrics.includes('Not Sure')) {
+                score += 5;
+            } else {
+                score += Math.min(25, 15 + (metrics.length * 2)); // Base 15 + 2 per metric, max 25
+            }
+            
+            // CAC awareness scoring
+            if (cac !== 'Don\'t Know') score += 25;
+            else score += 5;
+            
+            // Channel usage bonus (more channels = higher score)
+            if (channels.length > 0) {
+                score += Math.min(20, 10 + (channels.length * 2)); // Base 10 + 2 per channel, max 20
+            }
+            
+            const level = score >= 70 ? 'High' : score >= 50 ? 'Medium' : 'Growing';
+            const color = score >= 70 ? '#4CAF50' : score >= 50 ? '#FF9800' : '#F44336';
+            
+            return `
+                <div class="score-display" style="background: ${color}20; border-left: 4px solid ${color}; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <div style="font-size: 24px; font-weight: bold; color: ${color};">${level} Readiness</div>
+                    <div style="font-size: 14px; color: #666;">Score: ${score}/100</div>
+                </div>
+            `;
+        }
+
+        function generateRecommendations(responses) {
+            const recommendations = [];
+            const metrics = Array.isArray(responses['Metrics']) ? responses['Metrics'] : [responses['Metrics']];
+            const challenges = Array.isArray(responses['Challenges']) ? responses['Challenges'] : [responses['Challenges']];
+            const channels = Array.isArray(responses['Current Channels']) ? responses['Current Channels'] : [responses['Current Channels']];
+            
+            if (metrics.includes('Not Sure')) {
+                recommendations.push('Implement proper analytics tracking to measure ROI');
+            }
+            
+            if (responses['CAC Goals'] === 'Don\'t Know') {
+                recommendations.push('Calculate and set CAC targets based on your LTV');
+            }
+            
+            if (responses['Budget'] === 'Under $5K') {
+                recommendations.push('Focus on organic growth strategies and content marketing');
+            } else {
+                recommendations.push('Consider paid advertising to accelerate growth');
+            }
+            
+            if (challenges.includes('Lead Generation')) {
+                recommendations.push('Implement lead magnets and email nurture sequences');
+            }
+            
+            if (challenges.includes('ROI Measurement')) {
+                recommendations.push('Set up conversion tracking and attribution modeling');
+            }
+            
+            if (challenges.includes('Content Creation')) {
+                recommendations.push('Develop a content calendar and consider outsourcing content creation');
+            }
+            
+            if (challenges.includes('Team Resources')) {
+                recommendations.push('Consider hiring specialists or working with marketing agencies');
+            }
+            
+            if (channels.includes('Social Media') && !channels.includes('Paid Ads')) {
+                recommendations.push('Consider adding paid social media advertising to boost organic efforts');
+            }
+            
+            if (!channels.includes('Email Marketing')) {
+                recommendations.push('Implement email marketing to nurture leads and retain customers');
+            }
+            
+            return recommendations;
+        }
+
+        function setupExportFunctionality() {
+            document.getElementById('export-json').addEventListener('click', exportJSON);
+            document.getElementById('copy-summary').addEventListener('click', copySummary);
+            document.getElementById('export-pdf').addEventListener('click', exportPDF);
+        }
+
+        function exportJSON() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                responses: responses,
+                snapshot: snapshotContent.innerHTML
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `growth-readiness-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copySummary() {
+            const summary = snapshotContent.innerText;
+            navigator.clipboard.writeText(summary).then(() => {
+                alert('Summary copied to clipboard!');
+            });
+        }
+
+        function exportPDF() {
+            window.print();
+        }
+
+        // GoHighLevel API Configuration
+        const GHL_CONFIG = {
+            // Replace with your actual GoHighLevel API token (account-level)
+            apiToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6IkVuaE9obThPOHdIakxGRXlWdVZlIiwidmVyc2lvbiI6MSwiaWF0IjoxNzU4NzIyMzA4MDM3LCJzdWIiOiI4T24wWlU1ckx4Z3ZKbkJLSnZTUSJ9.adC2psWsnJUy91k-QvnX8M8MBI0UbcH_TSn_d1lf-9A',
+            // Replace with your GoHighLevel location ID (associated with the account-level token)
+            locationId: 'EnhOhm8O8wHjLFEyVuVe',
+            // Replace with your GoHighLevel pipeline ID for leads (optional - leave as is if you don't have one)
+            pipelineId: 'YOUR_PIPELINE_ID_HERE'
+        };
+
+        async function submitLeadToGoHighLevel(leadData) {
+            // Try different API endpoints for GoHighLevel
+            const urls = [
+                'https://services.leadconnectorhq.com/contacts/',
+                `https://services.leadconnectorhq.com/contacts/?locationId=${GHL_CONFIG.locationId}`,
+                `https://services.leadconnectorhq.com/contacts/?access_token=${GHL_CONFIG.apiToken}`
+            ];
+            
+            console.log('Submitting to GoHighLevel');
+            console.log('API Token (first 50 chars):', GHL_CONFIG.apiToken.substring(0, 50) + '...');
+            console.log('Location ID:', GHL_CONFIG.locationId);
+            
+            // Try to decode the JWT to check if it's valid
+            try {
+                const tokenParts = GHL_CONFIG.apiToken.split('.');
+                if (tokenParts.length === 3) {
+                    const payload = JSON.parse(atob(tokenParts[1]));
+                    console.log('JWT Payload:', payload);
+                    console.log('JWT Expiry:', new Date(payload.exp * 1000));
+                    console.log('JWT Issued At:', new Date(payload.iat * 1000));
+                }
+            } catch (e) {
+                console.error('Error decoding JWT:', e);
+            }
+            
+            const contactData = {
+                firstName: leadData.name.split(' ')[0] || leadData.name,
+                lastName: leadData.name.split(' ').slice(1).join(' ') || '',
+                email: leadData.email,
+                phone: leadData.phone || '',
+                companyName: leadData.company,
+                source: 'Growth Readiness Assessment',
+                tags: ['Marketing Assessment', 'Lead Generated'],
+                customFields: [
+                    {
+                        key: 'assessment_completed_date',
+                        value: leadData.timestamp
+                    },
+                    {
+                        key: 'business_goal',
+                        value: leadData.assessmentData['Business Goals']
+                    },
+                    {
+                        key: 'budget_range',
+                        value: leadData.assessmentData['Budget']
+                    },
+                    {
+                        key: 'marketing_channels',
+                        value: Array.isArray(leadData.assessmentData['Current Channels']) 
+                            ? leadData.assessmentData['Current Channels'].join(', ')
+                            : leadData.assessmentData['Current Channels']
+                    },
+                    {
+                        key: 'main_challenges',
+                        value: Array.isArray(leadData.assessmentData['Challenges'])
+                            ? leadData.assessmentData['Challenges'].join(', ')
+                            : leadData.assessmentData['Challenges']
+                    },
+                    {
+                        key: 'success_metrics',
+                        value: Array.isArray(leadData.assessmentData['Metrics'])
+                            ? leadData.assessmentData['Metrics'].join(', ')
+                            : leadData.assessmentData['Metrics']
+                    },
+                    {
+                        key: 'cac_target',
+                        value: leadData.assessmentData['CAC Goals']
+                    }
+                ]
+            };
+
+            // Only add pipeline ID if it's provided and not the placeholder
+            if (GHL_CONFIG.pipelineId && GHL_CONFIG.pipelineId !== 'YOUR_PIPELINE_ID_HERE') {
+                contactData.pipelineId = GHL_CONFIG.pipelineId;
+            }
+
+            // Only add location ID if it's provided and not the placeholder
+            if (GHL_CONFIG.locationId && GHL_CONFIG.locationId !== 'YOUR_LOCATION_ID_HERE') {
+                contactData.locationId = GHL_CONFIG.locationId;
+            }
+
+            console.log('Contact data being sent:', contactData);
+
+            // Try multiple authentication approaches
+            let response;
+            let attempt = 0;
+            
+            // Try standard Bearer token approach
+            console.log(`Attempt ${++attempt}: Standard Bearer token`);
+            response = await fetch(urls[0], {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GHL_CONFIG.apiToken}`,
+                    'Content-Type': 'application/json',
+                    'Version': '2021-07-28'
+                },
+                body: JSON.stringify(contactData)
+            });
+
+            // If first attempt fails with 401, try with locationId in URL
+            if (!response.ok && response.status === 401) {
+                console.log(`Attempt ${++attempt}: Bearer token with locationId in URL`);
+                response = await fetch(urls[1], {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GHL_CONFIG.apiToken}`,
+                        'Content-Type': 'application/json',
+                        'Version': '2021-07-28'
+                    },
+                    body: JSON.stringify(contactData)
+                });
+            }
+
+            // If still failing, try access_token as query parameter
+            if (!response.ok && response.status === 401) {
+                console.log(`Attempt ${++attempt}: Access token as query parameter`);
+                response = await fetch(urls[2], {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Version': '2021-07-28'
+                    },
+                    body: JSON.stringify(contactData)
+                });
+            }
+
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response body:', errorText);
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    errorData = errorText;
+                }
+                throw new Error(`GHL API Error: ${response.status} - ${JSON.stringify(errorData)}`);
+            }
+
+            const result = await response.json();
+            console.log('Lead successfully submitted to GoHighLevel:', result);
+            return result;
+        }
+
+        async function handleLeadCapture(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(leadCaptureForm);
+            const leadData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                company: formData.get('company'),
+                timestamp: new Date().toISOString(),
+                assessmentData: responses
+            };
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.submit-lead-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Test if we're on localhost
+                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                console.log('Testing from localhost:', isLocalhost);
+                console.log('Current URL:', window.location.href);
+                
+                if (isLocalhost) {
+                    console.log('LOCALHOST DETECTED: GoHighLevel API calls may be blocked by CORS');
+                    console.log('Data that would be sent to GoHighLevel:', leadData);
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+                } else {
+                    // Store lead data in GoHighLevel CRM
+                    await submitLeadToGoHighLevel(leadData);
+                }
+                
+                // Show success message and generate snapshot
+                leadCaptureContainer.style.display = 'none';
+                generateSnapshot();
+                resultsContainer.style.display = 'block';
+                
+                // Add lead data to the snapshot
+                addLeadDataToSnapshot(leadData);
+                
+            } catch (error) {
+                console.error('Error submitting lead:', error);
+                console.error('Error details:', error.message);
+                console.error('Lead data that failed:', leadData);
+                
+                // More detailed error message
+                let errorMessage = 'There was an error submitting your information. ';
+                if (error.message.includes('GHL API Error')) {
+                    errorMessage += 'API Error: ' + error.message;
+                } else {
+                    errorMessage += 'Error: ' + error.message;
+                }
+                alert(errorMessage);
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        function addLeadDataToSnapshot(leadData) {
+            const leadInfo = document.createElement('div');
+            leadInfo.className = 'lead-info';
+            leadInfo.innerHTML = `
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+                    <h4 style="margin: 0 0 10px 0; color: #333;"><i class="fas fa-user"></i> Assessment Completed By</h4>
+                    <p style="margin: 5px 0; color: #666;"><strong>Name:</strong> ${leadData.name}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Company:</strong> ${leadData.company}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Email:</strong> ${leadData.email}</p>
+                    ${leadData.phone ? `<p style="margin: 5px 0; color: #666;"><strong>Phone:</strong> ${leadData.phone}</p>` : ''}
+                </div>
+            `;
+            
+            snapshotContent.insertBefore(leadInfo, snapshotContent.firstChild);
+        }
+
+        function restartAssessment() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
