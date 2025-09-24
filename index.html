@@ -993,14 +993,15 @@
             
             // Try different API endpoint formats for location-level tokens
             const apiUrls = [
-                `https://services.leadconnectorhq.com/contacts/?locationId=${GHL_CONFIG.locationId}`,
                 `https://services.leadconnectorhq.com/contacts/`,
-                `https://rest.gohighlevel.com/v1/contacts/?locationId=${GHL_CONFIG.locationId}`
+                `https://services.leadconnectorhq.com/contacts/?locationId=${GHL_CONFIG.locationId}`,
+                `https://rest.gohighlevel.com/v1/contacts/`
             ];
             
-            console.log('Submitting to GoHighLevel');
+            console.log('🚀 Submitting to GoHighLevel - DEBUG VERSION v2.0');
             console.log('API Token (first 10 chars):', GHL_CONFIG.apiToken.substring(0, 10) + '...');
             console.log('Location ID:', GHL_CONFIG.locationId);
+            console.log('Current time:', new Date().toISOString());
             
             // Prepare contact data according to GoHighLevel API specification
             const contactData = {
@@ -1009,6 +1010,7 @@
                 email: leadData.email,
                 phone: leadData.phone || '',
                 companyName: leadData.company,
+                locationId: GHL_CONFIG.locationId,
                 source: 'Growth Readiness Assessment',
                 tags: ['Marketing Assessment', 'Lead Generated'],
                 customFields: [
