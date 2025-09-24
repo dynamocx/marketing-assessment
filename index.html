@@ -977,10 +977,9 @@
 
         // GoHighLevel API Configuration
         const GHL_CONFIG = {
-            // You need an ACCOUNT-LEVEL API token, not location-level
-            // Get this from: GoHighLevel Dashboard > Settings > API Keys > Account Level
-            apiToken: 'YOUR_ACCOUNT_LEVEL_API_TOKEN_HERE',
-            // Your GoHighLevel location ID
+            // Location-level API token for DynamoCX sub-account
+            apiToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6IkVuaE9obThPOHdIakxGRXlWdVZlIiwidmVyc2lvbiI6MSwiaWF0IjoxNzU4NzIyMzA4MDM3LCJzdWIiOiI4T24wWlU1ckx4Z3ZKbkJLSnZTUSJ9.adC2psWsnJUy91k-QvnX8M8MBI0UbcH_TSn_d1lf-9A',
+            // Your GoHighLevel location ID (DynamoCX)
             locationId: 'EnhOhm8O8wHjLFEyVuVe',
             // GoHighLevel pipeline ID for leads (optional)
             pipelineId: null
@@ -988,12 +987,12 @@
 
         async function submitLeadToGoHighLevel(leadData) {
             // Check if API token is configured
-            if (!GHL_CONFIG.apiToken || GHL_CONFIG.apiToken === 'YOUR_ACCOUNT_LEVEL_API_TOKEN_HERE') {
-                throw new Error('GoHighLevel API token not configured. Please add your account-level API token to GHL_CONFIG.apiToken');
+            if (!GHL_CONFIG.apiToken) {
+                throw new Error('GoHighLevel API token not configured');
             }
             
-            // Use the correct GoHighLevel API endpoint
-            const apiUrl = `https://services.leadconnectorhq.com/contacts/`;
+            // For location-level tokens, we need to include the locationId in the URL
+            const apiUrl = `https://services.leadconnectorhq.com/contacts/?locationId=${GHL_CONFIG.locationId}`;
             
             console.log('Submitting to GoHighLevel');
             console.log('API Token (first 10 chars):', GHL_CONFIG.apiToken.substring(0, 10) + '...');
@@ -1009,7 +1008,6 @@
                 companyName: leadData.company,
                 source: 'Growth Readiness Assessment',
                 tags: ['Marketing Assessment', 'Lead Generated'],
-                locationId: GHL_CONFIG.locationId,
                 customFields: [
                     {
                         key: 'assessment_completed_date',
@@ -1101,20 +1099,14 @@
             submitBtn.disabled = true;
             
             try {
-                // Test if we're on localhost or if API token is not configured
+                // Test if we're on localhost
                 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const isTokenConfigured = GHL_CONFIG.apiToken && GHL_CONFIG.apiToken !== 'YOUR_ACCOUNT_LEVEL_API_TOKEN_HERE';
                 
                 console.log('Testing from localhost:', isLocalhost);
-                console.log('API token configured:', isTokenConfigured);
                 console.log('Current URL:', window.location.href);
                 
-                if (isLocalhost || !isTokenConfigured) {
-                    if (isLocalhost) {
-                        console.log('LOCALHOST DETECTED: GoHighLevel API calls may be blocked by CORS');
-                    } else {
-                        console.log('API TOKEN NOT CONFIGURED: Skipping GoHighLevel submission');
-                    }
+                if (isLocalhost) {
+                    console.log('LOCALHOST DETECTED: GoHighLevel API calls may be blocked by CORS');
                     console.log('Data that would be sent to GoHighLevel:', leadData);
                     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
                 } else {
