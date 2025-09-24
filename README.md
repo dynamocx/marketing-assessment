@@ -43,3 +43,4 @@ const GHL_CONFIG = {
 - Update styling in the CSS section
 - Add/remove custom fields for GoHighLevel integration
 - Customize recommendations logic
+
