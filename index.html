@@ -1158,7 +1158,10 @@
             console.log('📝 Snapshot custom fields to add:', snapshotCustomFields);
             contactData.customFields.push(...snapshotCustomFields);
 
-            console.log('Contact data being sent:', contactData);
+            console.log('📋 FINAL Contact data being sent to GoHighLevel:');
+            console.log('Custom Fields Count:', contactData.customFields.length);
+            console.log('All Custom Fields:', contactData.customFields);
+            console.log('Full Contact Data:', contactData);
 
             // Try multiple endpoints and authentication methods
             let lastError = null;
@@ -1265,23 +1268,11 @@
                 addLeadDataToSnapshot(leadData);
                 
                 // Post-submission: Update contact with detailed snapshot (if we have contact ID)
-                if (contactId && !isLocalhost) {
-                    console.log('🔄 Post-submission: Updating contact with detailed snapshot...');
-                    console.log('📞 Contact ID:', contactId);
-                    setTimeout(async () => {
-                        try {
-                            await updateContactWithSnapshot(contactId, leadData);
-                            console.log('✅ Contact updated with detailed snapshot');
-                        } catch (error) {
-                            console.log('⚠️ Failed to update contact with snapshot (non-critical):', error.message);
-                        }
-                    }, 2000); // Wait 2 seconds before updating
-                } else {
-                    console.log('ℹ️ Skipping post-submission update:', {
-                        hasContactId: !!contactId,
-                        isLocalhost: isLocalhost
-                    });
-                }
+                // DISABLED: Post-submission update is causing 401 JWT errors
+                // The snapshot data is already included in the initial contact creation
+                console.log('ℹ️ Post-submission update disabled - snapshot data already included in initial contact creation');
+                console.log('📞 Contact ID:', contactId);
+                console.log('✅ Snapshot data should be visible in GoHighLevel custom fields');
                 
             } catch (error) {
                 console.error('Error submitting lead:', error);
