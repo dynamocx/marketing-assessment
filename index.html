@@ -113,6 +113,13 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
             position: relative;
+            animation: avatarPulse 2s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .message-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
         }
 
         .message-avatar::before {
@@ -126,6 +133,27 @@
             border-radius: 50%;
             z-index: -1;
             opacity: 0.3;
+            animation: avatarGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes avatarGlow {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.05);
+            }
         }
 
         .user-message .message-avatar {
@@ -485,7 +513,9 @@
 
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot-message">
-                    <div class="message-avatar">A</div>
+                    <div class="message-avatar">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
                     <div class="message-content">
                         <p>Hi! I'm Alex, your 2-Minute Marketing Growth Assistant. Let's quickly assess your current marketing situation to create your Growth Readiness Snapshot.</p>
                         <p>This will take just 2 minutes with 6 quick questions. Ready to get started?</p>
@@ -828,7 +858,9 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message bot-message';
             messageDiv.innerHTML = `
-                <div class="message-avatar">A</div>
+                <div class="message-avatar">
+                    <i class="fas fa-chart-line"></i>
+                </div>
                 <div class="message-content">
                     <p>${message}</p>
                 </div>
