@@ -514,7 +514,17 @@
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot-message">
                     <div class="message-avatar">
-                        <i class="fas fa-chart-line"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 20L12 4L16 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 16H18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                            <!-- Rocket -->
+                            <path d="M16 12L19 8L20.5 9.5L17.5 12.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20 8L22 6L23 7L21 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Exhaust trails -->
+                            <path d="M16.5 13L14 15.5L15.5 17L18 14.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+                            <path d="M17.5 13.5L15.5 15.5L16.5 16.5L18.5 14.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                            <path d="M18.5 14L17 15.5L17.5 16L19 14.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+                        </svg>
                     </div>
                     <div class="message-content">
                         <p>Hi! I'm Alex, your 2-Minute Marketing Growth Assistant. Let's quickly assess your current marketing situation to create your Growth Readiness Snapshot.</p>
@@ -859,7 +869,17 @@
             messageDiv.className = 'message bot-message';
             messageDiv.innerHTML = `
                 <div class="message-avatar">
-                    <i class="fas fa-chart-line"></i>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 20L12 4L16 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 16H18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Rocket -->
+                        <path d="M16 12L19 8L20.5 9.5L17.5 12.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20 8L22 6L23 7L21 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Exhaust trails -->
+                        <path d="M16.5 13L14 15.5L15.5 17L18 14.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+                        <path d="M17.5 13.5L15.5 15.5L16.5 16.5L18.5 14.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                        <path d="M18.5 14L17 15.5L17.5 16L19 14.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+                    </svg>
                 </div>
                 <div class="message-content">
                     <p>${message}</p>
